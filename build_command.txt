@@ -1,0 +1,16 @@
+ansible-builder build -t custom-ee-29-rhel8 -v 3
+
+podman image list
+
+podman tag localhost/custom-ee-29-rhel8 <hub_server>/custom-ee-29-rhel8:v1.9.26.2023
+
+podman push <hub_server>/custom-ee-29-rhel8:v1.9.26.2023
+
+
+ansible-builder build -t custom-ee-215-rhel8 -v 3
+
+podman image list
+
+podman tag localhost/custom-ee-215-rhel8 <hub_server>/custom-ee-215-rhel8:v1.9.27.2023
+
+podman push <hub_server>/custom-ee-215-rhel8:v1.9.27.2023

@@ -1,0 +1,24 @@
+---
+collections:
+  - name: kubernetes.core
+    version: 2.2.1
+  - name: amazon.aws
+    version: 1.5.0
+  - name: community.vmware
+    version: 1.13.0
+  - name: community.general
+    version: 3.5.0
+  - name: community.windows
+    version: 1.7.2
+  - name: vmware.vmware_rest
+    version: 2.0.0
+  - name: chocolatey.chocolatey
+    version: 1.0.2
+  - name: redhat.rhv
+    version: 1.4.4
+  - name: dellemc.openmanage
+    version: 4.1.0
+  - name: netapp.ontap
+    version: 20.11.0
+  - name: redhat.openshift
+    version: 2.3.0

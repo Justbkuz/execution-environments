@@ -1,0 +1,54 @@
+---
+version: 3
+
+build_arg_defaults:
+  ANSIBLE_GALAXY_CLI_COLLECTION_OPTS: '--ignore-certs'
+
+dependencies:
+  ansible_core:
+    package_pip: ansible-core==2.15.4
+  ansible_runner:
+    package_pip: ansible-runner
+  galaxy: requirements.yml
+  python_interpreter:
+    package_system: python39
+    python_path: /usr/bin/python3.9
+  python: requirements.txt
+  system: bindep.txt
+images:
+  base_image:
+    name: registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel8:latest
+# Other available base images:
+# - quay.io/rockylinux/rockylinux:9
+# - quay.io/centos/centos:stream9
+# - registry.fedoraproject.org/fedora:38
+# - registry.redhat.io/ansible-automation-platform-23/ee-minimal-rhel8:latest
+# (needs an account)
+# Custom package manager path for the RHEL based images
+options:
+  package_manager_path: /usr/bin/microdnf
+additional_build_files:
+  - src: openshift-clients-4.13.0-202308112024.p0.g17b7acc.assembly.stream.el8.x86_64.rpm
+    dest: rpms
+  - src: ca-certificates.crt
+    dest: configs
+  - src: ansible.cfg
+    dest: configs
+additional_build_steps:
+  prepend_base:
+    - COPY _build/configs/ca-certificates.crt /usr/share/pki/ca-trust-source/anchors
+    - RUN update-ca-trust
+    - COPY _build/rpms/*.rpm /tmp/openshift-clients.rpm
+    - RUN $PKGMGR install bash-completion
+    - RUN rpm -ivh /tmp/openshift-clients.rpm
+   # Enable Non-default stream before packages provided by it can be installed.␣
+  prepend_galaxy:
+    - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
+# prepend_builder:
+#  - ENV PKGMGR_OPTS="--nodocs --setopt=install_weak_deps=0 --setopt=rhocp-4.12-for-rhel-8-x86_64-rpms.enabled=true"
+# prepend_final:
+#- ENV PKGMGR_OPTS="--nodocs --setopt=install_weak_deps=0 --setopt=rhocp-4.12-for-rhel-8-x86_64-rpms.enabled=true"
+  append_final:
+    - RUN echo This is a post-install command!
+    - RUN python3.9 -m pip list
+    - RUN ansible-galaxy collection list
