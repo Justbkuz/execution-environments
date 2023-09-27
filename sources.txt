@@ -1,0 +1,5 @@
+Certified Collection List
+https://access.redhat.com/support/articles/ansible-automation-platform-certified-content
+
+docs.ansible collection index
+https://docs.ansible.com/ansible/latest/collections/index.html
